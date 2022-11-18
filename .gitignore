@@ -1,1 +1,4 @@
 /.idea
+/kio-data-ui/.vscode/
+/kio-data-ui/node_modules/
+/kio-data-ui/dist/

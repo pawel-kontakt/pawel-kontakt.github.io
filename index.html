@@ -1,8 +1,26 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Kio Cloud Telemetry History</title>
+    <meta charset="UTF-8">
+    <title>Kio Cloud Telemetry Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ractive"></script>
+    <link rel="stylesheet" href="src/base.css" />
 </head>
 <body>
-<h1>Telemetry history</h1>
+<h1>Telemetry History Dashboard</h1>
+<div>
+    <label for="api-key">Api Key</label><input type="password" name="api-key" id="api-key"/>
+</div>
+<div>
+    <label for="start-time">Start date</label><input type="date" name="start-time" id="start-time"/>
+    <label for="end-time">End date</label><input type="date" name="end-time" id="end-time"/>
+    <label for="tracking-id">Device MAC address</label><input type="text" name="tracking-id" id="tracking-id"/>
+</div>
+<div>
+    <canvas id="telemetry-history-chart"></canvas>
+</div>
+<script src="src/main.js"></script>
 </body>
 </html>
