@@ -16,14 +16,15 @@
       />
     </n-layout-sider>
     <n-layout-content>
-      <component :is="menuOption"></component>
+      <component :is="menuOption" v-bind="{env}"></component>
     </n-layout-content>
   </n-layout>
+  <AuthPopup v-model:show="authConfig" v-model:env="env"></AuthPopup>
 </template>
 
 <script>
-import {h, defineComponent} from "vue";
-import {NIcon, NLayout, NLayoutSider, NLayoutContent, NMenu} from "naive-ui";
+import {h} from "vue";
+import {NIcon, NLayout, NLayoutSider, NLayoutContent, NMenu, NButton} from "naive-ui";
 import {
   LockClosedOutline as LockIcon,
   AnalyticsOutline as TelemetryIcon,
@@ -31,52 +32,66 @@ import {
 
 } from "@vicons/ionicons5";
 
-import AuthPopup from "./auth/AuthPopup.vue";
-import TelemetryPage from "./telemetry/TelemetryPage.vue";
-import OccupancyPage from "./occupancy/OccupancyPage.vue";
+import AuthPopup from "@/auth/AuthPopup.vue";
+import TelemetryPage from "@/telemetry/TelemetryPage.vue";
+import OccupancyPage from "@/occupancy/OccupancyPage.vue";
+import {prodUs} from "@/auth/Env.js";
 
 function renderIcon(icon) {
   return () => h(NIcon, null, {default: () => h(icon)});
 }
 
-const menuOptions = [
-  {
-    label: "Authenticate",
-    key: AuthPopup.name,
-    icon: renderIcon(LockIcon)
-  },
-  {
-    label: "Telemetry",
-    key: TelemetryPage.name,
-    icon: renderIcon(TelemetryIcon),
-  },
-  {
-    label: "Occupancy",
-    key: OccupancyPage.name,
-    icon: renderIcon(OccupancyIcon),
-  }
-];
-let menuOption = TelemetryPage.name
-
-export default defineComponent({
+export default {
+  name: "App",
   components: {
-    NLayout, NLayoutSider, NLayoutContent, NMenu,
+    NIcon, NLayout, NLayoutSider, NLayoutContent, NMenu, NButton,
     AuthPopup, TelemetryPage, OccupancyPage
   },
-  props(){},
-  setup() {
+  data() {
     return {
-      menuOptions,
-      menuOption,
-    };
+      menuOptions: [
+        {
+          label: "Authenticate",
+          key: AuthPopup.name,
+          icon: renderIcon(LockIcon)
+        },
+        {
+          label: "Telemetry",
+          key: TelemetryPage.name,
+          icon: renderIcon(TelemetryIcon),
+        },
+        {
+          label: "Occupancy",
+          key: OccupancyPage.name,
+          icon: renderIcon(OccupancyIcon),
+        }
+      ],
+      menuOption: TelemetryPage.name,
+      authConfig: false,
+      env: prodUs
+    }
+  },
+  methods: {
+    menuSelection(key) {
+      switch (key) {
+        case TelemetryPage.name:
+          this.authConfig = false;
+          this.menuOption = key;
+          break;
+        case AuthPopup.name:
+          this.authConfig = true;
+          break;
+        case OccupancyPage.name:
+          this.authConfig = false;
+          this.menuOption = key;
+          break;
+      }
+    },
   }
-});
+}
+
 </script>
 
 <style scoped>
-.n-layout {
-  height: 100vh;
-}
+
 </style>
-
-
