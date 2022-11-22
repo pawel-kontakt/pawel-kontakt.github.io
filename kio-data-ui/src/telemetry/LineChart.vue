@@ -11,9 +11,10 @@
 
 <script>
 import {Line} from 'vue-chartjs'
-import {Chart as ChartJS, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale} from 'chart.js'
+import {Chart as ChartJS, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale, TimeScale, TimeSeriesScale, Colors} from 'chart.js'
+import 'chartjs-adapter-date-fns';
 
-ChartJS.register(Tooltip, Legend, LineElement,  CategoryScale, PointElement, LinearScale)
+ChartJS.register(Tooltip, Legend, LineElement, CategoryScale, PointElement, LinearScale, TimeScale, TimeSeriesScale, Colors)
 
 export default {
   name: "LineChart",
@@ -21,11 +22,17 @@ export default {
   props: {
     chartId: {
       type: String,
-      default: 'bar-chart'
+      default: 'line-chart'
     },
     datasetIdKey: {
       type: String,
       default: 'label'
+    },
+    chartData: {
+      type: Object
+    },
+    chartOptions: {
+      type: Object
     },
     chartStyles: {
       type: Object,
@@ -43,21 +50,6 @@ export default {
   },
   data() {
     return {
-      chartData: {
-        labels: ['January', 'February', 'March','4',5,6,7,8,9],
-        datasets: [{data: [40, 20, 12, 11, 22,33,44,55,5]}]
-      },
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            type: 'linear',
-            display: true,
-            position: 'left',
-          }
-        }
-      }
     }
   }
 }

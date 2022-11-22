@@ -1,5 +1,5 @@
 <template>
-  <LineChart/>
+  <LineChart ref="telemetryChart" :chart-data="chartData" :chart-options="chartOptions"/>
 </template>
 
 <script>
@@ -16,12 +16,65 @@ export default {
   },
   data() {
     return {
-      telemetrySeries: {}
+      chartData: {
+        datasets: [{
+          label: '110HQ',
+          parsing: {
+            xAxisKey: 'timestamp',
+            yAxisKey: 'temperature'
+          },
+          data: [{temperature: 18, timestamp: new Date('2022-11-21T20:00:00.000Z')}]
+        }]
+      },
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            type: 'timeseries'
+          },
+          y: {
+            type: 'linear',
+            grace: '10%',
+            display: true,
+            position: 'left',
+          }
+        }
+      }
     }
   },
   computed: {
     allParamsProvided() {
       return !!this.env.apiKey;
+    },
+    chartOptionsC() {
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            type: 'timeseries'
+          },
+          y: {
+            type: 'linear',
+            grace: '10%',
+            display: true,
+            position: 'left',
+          }
+        }
+      }
+    },
+    chartDataC() {
+      return {
+        datasets: [{
+          label: '110HQ',
+          parsing: {
+            xAxisKey: 'timestamp',
+            yAxisKey: 'temperature'
+          },
+          data: [{temperature: 18, timestamp: new Date('2022-11-21T20:00:00.000Z')}]
+        }]
+      }
     }
   },
   watch: {
@@ -32,7 +85,14 @@ export default {
   methods: {
     loadTelemetry() {
       console.log('Load telemetry for Env: %o', this.env);
-      telemetryService.loadTelemetry(this.env, {}, this.telemetrySeries);
+      this.chartData.datasets[0].data.push({temperature: 18, timestamp: new Date('2022-11-21T20:01:00.000Z')});
+      telemetryService.loadTelemetry(this.env, {}, telemetryBatch => {
+        console.log(this.chartData.datasets[0].data);
+        // this.chartData.datasets[0].data.push(telemetryBatch);
+        console.log(telemetryBatch);
+        // this.$refs.telemetryChart.updateChart();
+
+      });
     }
   }
 }
